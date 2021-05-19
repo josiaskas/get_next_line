@@ -3,14 +3,10 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 #source
-SRCS =	get_next_line.c get_next_line_utils.c
-
-TEST_SRCS = test.c \
+SRCS =	get_next_line_utils.c get_next_line.c test.c
 
 #objects
-OBJS_DIR = objs/
 OBJS = $(SRCS:.c=.o)
-OBJS_TEST = $(TEST_SRCS.c=.o)
 
 #prefixing for space in folder while working
 OBJS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
@@ -23,7 +19,7 @@ all	: $(NAME)
 
 #make exec
 $(NAME)	: $(OBJS_PREFIXED)
-	@$(CC) $(CFLAGS) -o $(NAME) $<
+	$(CC) $(CFLAGS) -I . -o $(NAME) $<
 
 #compiling
 $(OBJS_DIR)%.o	: %.c get_next_line.h
@@ -32,7 +28,7 @@ $(OBJS_DIR)%.o	: %.c get_next_line.h
 
 test	:$(OBJS_PREFIXED) $(OBJS_TEST_PREFIXED)
 	@rm -f $(NAME)
-	@$(CC) $(CFLAGS) -o $(NAME) $<
+	$(CC) $(CFLAGS) -I . -o $(NAME) $<
 	./$(NAME)
 
 clean	:

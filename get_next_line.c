@@ -6,13 +6,13 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:25:51 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/18 15:41:52 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/18 19:45:58 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static void	ft_bzero(void *s, size_t n)
+void	ft_bzero(void *s, size_t n)
 {
 	size_t			i;
 	unsigned char	*temp;
@@ -24,7 +24,7 @@ static void	ft_bzero(void *s, size_t n)
 	s = temp;
 }
 
-static char	*ft_strcat(char *dest, char *src)
+char	*ft_strcat(char *dest, char *src)
 {
 	int	i;
 	int	j;
@@ -42,7 +42,7 @@ static char	*ft_strcat(char *dest, char *src)
 	return (dest);
 }
 
-static char	*make_line(t_chunk *chunk, size_t max_size)
+static char	*make_line(t_list *chunk, size_t max_size)
 {
 	char	*line;
 
@@ -54,47 +54,56 @@ static char	*make_line(t_chunk *chunk, size_t max_size)
 	ft_bzero(line, (max_size + 1));
 	while (chunk)
 	{
-		ft_strcat(line, chunk->string);
-		free(chunk->string);
+		ft_strcat(line, chunk->content);
+		free(chunk->content);
 		chunk = chunk->next;
 	}
 	return (line);
 }
 
-static size_t	read_data(int fd, t_chunk **first, size_t *nbr)
+static long	read_data(int fd, t_list **first, size_t *nbr)
 {
 	char	buffer[BUFFER_SIZE + 1];
 	char	*endl;
-	size_t	byte_readed;
-	t_chunk	*chunk;
+	long	byte_readed;
+	t_list	*chunk;
 
-	while (byte_readed = read(fd, &buffer, BUFFER_SIZE))
+	while ((byte_readed = read(fd, &buffer, BUFFER_SIZE)))
 	{
 		buffer[byte_readed] = 0;
-		endl = ft_strrchr(&buffer, '\n');
+		endl = ft_strrchr(&buffer[0], '\n');
 		if (endl != 0)
 		{
-			chunk = make_chunk(ft_strndup(buffer, (endl - buffer)));
+			chunk = ft_lstnew(ft_strndup(&buffer[0], (endl - buffer)));
+			if (!chunk)
+				return (-1);
 			nbr += (size_t)(endl - buffer);
-			add_chunk(first, chunk);
+			ft_lstadd_back(first, chunk);
 			break ;
 		}
-		chunk = make_chunk(ft_strndup(buffer, byte_readed));
+		chunk = ft_lstnew(ft_strndup(&buffer[0], byte_readed));
+		if (!chunk)
+			return (-1);
 		nbr += byte_readed;
-		add_chunk(first, chunk);
+		ft_lstadd_back(first, chunk);
 	}
 	return (byte_readed);
 }
 
 int	get_next_line(int fd, char **line)
 {
-	t_chunk	**first_chunk;
+	t_list	**first_chunk;
 	size_t	nbr_byte_line;
-	size_t	reading;
-	t_chunk	*tmp;
+	int		reading;
+	t_list	*tmp;
 
 	first_chunk = 0;
 	reading = read_data(fd, first_chunk, &nbr_byte_line);
+	if (reading == -1)
+	{
+		*line = NULL;
+		return (-1);
+	}
 	*line = make_line(*first_chunk, nbr_byte_line);
 	while (*first_chunk)
 	{
@@ -102,8 +111,7 @@ int	get_next_line(int fd, char **line)
 		free(*first_chunk);
 		*first_chunk = tmp;
 	}
-	if ((reading == -1) || (reading == 0))
-		return ((int)reading);
-	else
-		return (1);
+	if (reading == 0)
+		return (reading);
+	return (1);
 }

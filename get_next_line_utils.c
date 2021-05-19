@@ -6,46 +6,46 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:26:01 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/18 15:17:38 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/18 19:31:28 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_chunk	*make_chunk(char *string)
+t_list	*ft_lstnew(void *content)
 {
-	t_chunk	*chunk;
+	t_list *link;
 
-	chunk = (t_chunk *)malloc(sizeof(t_chunk));
-	if (!chunk)
-		return (NULL);
-	chunk->string = string;
-	chunk->next = 0;
-	return (chunk);
+	link = (t_list *)malloc(sizeof(t_list));
+	if (!link)
+		return (0);
+	link->content = content;
+	link->next = 0;
+	return (link);
 }
 
-void	add_chunk(t_chunk **first, t_chunk *new_chunk)
+t_list	*ft_lstlast(t_list *lst)
 {
-	t_chunk *chunk;
-
-	if (*first)
+	while (lst)
 	{
-		chunk = ft_lstlast(*first);
-		chunk->next = &*new_chunk;
-	}
-	else
-		*first = new_chunk;
-}
-
-t_chunk	*last_chunk(t_chunk *chunk)
-{
-	while (chunk)
-	{
-		if (chunk->next == 0)
-			return (chunk);
-		chunk = chunk->next;
+		if (lst->next == 0)
+			return (lst);
+		lst = lst->next;
 	}
 	return (0);
+}
+
+void	ft_lstadd_back(t_list **alst, t_list *new)
+{
+	t_list *link;
+
+	if (*alst)
+	{
+		link = ft_lstlast(*alst);
+		link->next = &*new;
+	}
+	else
+		*alst = new;
 }
 
 char	*ft_strrchr(const char *s, int c)
