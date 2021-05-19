@@ -6,68 +6,55 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:26:01 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/18 19:31:28 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/19 12:21:39 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_list	*ft_lstnew(void *content)
+static void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	t_list *link;
+	unsigned char		*d;
+	const unsigned char	*s;
 
-	link = (t_list *)malloc(sizeof(t_list));
-	if (!link)
+	s = (const unsigned char *)src;
+	d = (unsigned char *)dst;
+	if (dst == src)
+		return (dst);
+	if ((s < d) && (d < (s + len)))
+	{
+		while (len--)
+			*(d + len) = *(s + len);
+		return (dst);
+	}
+	while (len--)
+		*d++ = *s++;
+	return (dst);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*heap_p;
+	char	*p;
+	size_t	len;
+
+	len = 0;
+	while (s1[len])
+		len++;
+	heap_p = malloc(len + 1);
+	if (!heap_p)
 		return (0);
-	link->content = content;
-	link->next = 0;
-	return (link);
-}
-
-t_list	*ft_lstlast(t_list *lst)
-{
-	while (lst)
-	{
-		if (lst->next == 0)
-			return (lst);
-		lst = lst->next;
-	}
-	return (0);
-}
-
-void	ft_lstadd_back(t_list **alst, t_list *new)
-{
-	t_list *link;
-
-	if (*alst)
-	{
-		link = ft_lstlast(*alst);
-		link->next = &*new;
-	}
-	else
-		*alst = new;
-}
-
-char	*ft_strrchr(const char *s, int c)
-{
-	char *found;
-
-	found = 0;
-	while (*s != 0)
-	{
-		if (*s == c)
-			found = (char *)s;
-		s++;
-	}
-	if (*s == c)
-		return ((char *)s);
-	return (found);
+	p = heap_p;
+	while (*s1 != 0)
+		*p++ = *s1++;
+	*p = '\0';
+	return (heap_p);
 }
 
 char	*ft_strndup(const char *s1, size_t n)
 {
-	char *heap_p;
-	char *p;
+	char	*heap_p;
+	char	*p;
 
 	heap_p = malloc(n + 1);
 	if (!heap_p)
@@ -76,5 +63,43 @@ char	*ft_strndup(const char *s1, size_t n)
 	while ((*s1 != 0) && (n--))
 		*p++ = *s1++;
 	*p = '\0';
+	return (heap_p);
+}
+
+static size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s)
+		return (i);
+	while (*s != 0)
+	{
+		s++;
+		i++;
+	}
+	return (i);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	size_t	len1;
+	size_t	len2;
+	char	*heap_p;
+
+	if (!s1 && !s2)
+		return (ft_strdup(""));
+	if (s1 && !s2)
+		return (ft_strdup(s1));
+	if (!s1 && s2)
+		return (ft_strdup(s2));
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	heap_p = malloc(len1 + len2 + 1);
+	if (!heap_p)
+		return (0);
+	ft_memmove(heap_p, s1, len1);
+	ft_memmove((heap_p + len1), s2, len2);
+	heap_p[len1 + len2] = 0;
 	return (heap_p);
 }

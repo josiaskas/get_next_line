@@ -1,4 +1,4 @@
-NAME = getnext
+NAME = getnextline
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
@@ -10,10 +10,9 @@ OBJS = $(SRCS:.c=.o)
 
 #prefixing for space in folder while working
 OBJS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
-OBJS_TEST_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS_TEST))
 
 #quelques args reservEs
-.PHONY	: all clean fclean re test help
+.PHONY	: all clean fclean re help
 
 all	: $(NAME)
 
@@ -25,11 +24,6 @@ $(NAME)	: $(OBJS_PREFIXED)
 $(OBJS_DIR)%.o	: %.c get_next_line.h
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -o $@ -c $<
-
-test	:$(OBJS_PREFIXED) $(OBJS_TEST_PREFIXED)
-	@rm -f $(NAME)
-	$(CC) $(CFLAGS) -I . -o $(NAME) $<
-	./$(NAME)
 
 clean	:
 	@rm -rf $(OBJS_DIR)
