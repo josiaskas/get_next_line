@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:25:51 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/20 14:29:19 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/20 19:41:38 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	*ft_strchr(const char *s, int c)
 
 static void	ft_bzero(void *s, size_t n)
 {
-	size_t	i;
+	size_t			i;
 	unsigned char	*temp;
 
 	i = 0;
@@ -50,7 +50,8 @@ static char	*read_data(int fd, char **line, int *readed)
 		tmp = *line;
 		*line = ft_strjoin(tmp, buffer);
 		free(tmp);
-		if ((endl = ft_strchr(*line, 10)))
+		endl = ft_strchr(*line, 10);
+		if (endl)
 		{
 			tmp = ft_strndup(*line, (endl - *line));
 			free(*line);
@@ -64,17 +65,19 @@ static char	*read_data(int fd, char **line, int *readed)
 	return (0);
 }
 
-int get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static char	*file[MAX_FD];
 	int			readed;
 
 	readed = 1;
-	if ((fd < 0) || (line == NULL) || (BUFFER_SIZE < 1))
+	if ((fd < 0) || (!line) || (BUFFER_SIZE < 1) || (read(fd, file, 0) < 0))
 		return (-1);
 	*line = 0;
 	if (file[fd])
 		*line = file[fd];
 	file[fd] = read_data(fd, line, &readed);
+	if (readed > 1)
+		return (1);
 	return (readed);
 }
