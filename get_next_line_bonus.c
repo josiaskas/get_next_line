@@ -6,7 +6,7 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:25:51 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/20 17:05:58 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/20 14:29:19 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,46 +64,17 @@ static char	*read_data(int fd, char **line, int *readed)
 	return (0);
 }
 
-static size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+int get_next_line(int fd, char **line)
 {
-	size_t copied;
-	const char *s_begin = src;
-
-	copied = 0;
-	if ((dst == 0) || (src == 0))
-		return (0);
-	while ((*src != 0) && (copied < (dstsize - 1)) && (dstsize != 0))
-	{
-		*dst = *src;
-		copied++;
-		src++;
-		dst++;
-	}
-	if (dstsize != 0)
-		*dst = 0;
-	while (*src != 0)
-		src++;
-	return (src - s_begin);
-}
-
-int	get_next_line(int fd, char **line)
-{
-	static char	file[BUFFER_SIZE + 1];
+	static char	*file[MAX_FD];
 	int			readed;
-	int			check;
-	char		*tmp;
 
 	readed = 1;
 	if ((fd < 0) || (line == NULL) || (BUFFER_SIZE < 1))
 		return (-1);
 	*line = 0;
-	if (file[0] != 0)
-		*line = ft_strdup(file);
-	tmp = read_data(fd, line, &readed);
-	if (!tmp)
-		ft_bzero(file, BUFFER_SIZE);
-	else
-		check = ft_strlcpy(file, tmp, (BUFFER_SIZE + 1));
-	free(tmp);
+	if (file[fd])
+		*line = file[fd];
+	file[fd] = read_data(fd, line, &readed);
 	return (readed);
 }
