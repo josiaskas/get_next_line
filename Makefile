@@ -3,30 +3,26 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 #source
-SRCS =	get_next_line_utils.c get_next_line.c test.c
+SRCS =	test.c get_next_line.c get_next_line_utils.c
 
 #objects
 OBJS = $(SRCS:.c=.o)
 
-#prefixing for space in folder while working
-OBJS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
-
+#BUFFER SIZE
+BUFFER?=42
 #quelques args reservEs
 .PHONY	: all clean fclean re help
 
 all	: $(NAME)
 
 #make exec
-$(NAME)	: $(OBJS_PREFIXED)
-	$(CC) $(CFLAGS) -I . -o $(NAME) $<
-
+$(NAME)	: $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 #compiling
-$(OBJS_DIR)%.o	: %.c get_next_line.h
-	@mkdir -p $(OBJS_DIR)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
+$(OBJS): $(SRCS)
+	$(CC) $(CFLAGS) -I . -D BUFFER_SIZE=$(BUFFER) -o $@ -c $<
 clean	:
-	@rm -rf $(OBJS_DIR)
+	@rm -rf *.o
 	@echo "cleaning objects"
 
 fclean	: clean

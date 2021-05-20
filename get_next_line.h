@@ -6,7 +6,7 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:26:13 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/19 12:36:22 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/20 14:46:37 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <unistd.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 151
 # endif
 
 # define MAX_FD 65535

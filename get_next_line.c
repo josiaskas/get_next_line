@@ -6,79 +6,75 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:25:51 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/19 15:55:02 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/20 14:29:19 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*ft_strrchr(const char *s, int c)
+static char	*ft_strchr(const char *s, int c)
 {
-	char	*found;
-
-	found = 0;
-	if (!s)
-		return (0);
 	while (*s != 0)
 	{
 		if (*s == c)
-			found = (char *)s;
+			return ((char *)s);
 		s++;
 	}
 	if (*s == c)
 		return ((char *)s);
-	return (found);
+	return (0);
 }
 
-static int	read_data(int fd, char *line, char *lst_part)
+static void	ft_bzero(void *s, size_t n)
 {
-	int		readed;
+	size_t	i;
+	unsigned char	*temp;
+
+	i = 0;
+	temp = (unsigned char *)s;
+	while (i < n)
+		temp[i++] = 0;
+	s = temp;
+}
+
+static char	*read_data(int fd, char **line, int *readed)
+{
+	char	*endl;
 	char	*tmp;
 	char	buffer[BUFFER_SIZE + 1];
-	char	*endl;
 
-	readed = 1;
-	while (readed > 0)
+	buffer[0] = 0;
+	tmp = 0;
+	while ((*readed) > 0)
 	{
-		tmp = line;
-		endl = ft_strrchr(tmp, '\n');
-		if (endl)
-		{
-			line = ft_strndup(tmp, (endl - tmp));
-			free(lst_part);
-			lst_part = ft_strdup(endl + 1);
-			if (!line || !lst_part)
-
-
-			break ;
-		}
-		line = ft_strjoin(tmp, buffer);
-		if (line == 0)
-			return (-1);
+		tmp = *line;
+		*line = ft_strjoin(tmp, buffer);
 		free(tmp);
-		readed = read(fd, buffer, BUFFER_SIZE);
-		buffer[BUFFER_SIZE + 1] = 0;
+		if ((endl = ft_strchr(*line, 10)))
+		{
+			tmp = ft_strndup(*line, (endl - *line));
+			free(*line);
+			*line = tmp;
+			return (ft_strdup(endl + 1));
+		}
+		ft_bzero(buffer, BUFFER_SIZE);
+		*readed = read(fd, buffer, BUFFER_SIZE);
+		buffer[BUFFER_SIZE] = 0;
 	}
-	return (readed);
+	return (0);
 }
 
-int	get_next_line(int fd, char **line)
+int get_next_line(int fd, char **line)
 {
-	static char	*file[MAX_FD] = {0};
-	char		*lst_part;
-	char		*tmp;
-	int			check;
+	static char	*file[MAX_FD];
+	int			readed;
 
+	readed = 1;
 	if ((fd < 0) || (line == NULL) || (BUFFER_SIZE < 1))
 		return (-1);
+	*line = 0;
 	if (file[fd])
-	{
-		lst_part = ft_strdup(file[fd]);
-		*line = lst_part;
-		check = read_data(fd, *line, lst_part);
-	}
-	else
-		lst_part = 0;
-	check = read_data(fd, *line, lst_part);
-	free(lst_part);
+		*line = file[fd];
+	file[fd] = read_data(fd, line, &readed);
+	return (readed);
 }

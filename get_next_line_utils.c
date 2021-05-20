@@ -6,16 +6,31 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:26:01 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/19 12:21:39 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/20 14:30:36 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+static size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s)
+		return (i);
+	while (*s != 0)
+	{
+		s++;
+		i++;
+	}
+	return (i);
+}
+
 static void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	unsigned char		*d;
-	const unsigned char	*s;
+	unsigned char *d;
+	const unsigned char *s;
 
 	s = (const unsigned char *)src;
 	d = (unsigned char *)dst;
@@ -30,6 +45,21 @@ static void	*ft_memmove(void *dst, const void *src, size_t len)
 	while (len--)
 		*d++ = *s++;
 	return (dst);
+}
+
+char	*ft_strndup(const char *s1, size_t n)
+{
+	char	*heap_p;
+	char	*p;
+
+	heap_p = malloc(n + 1);
+	if (!heap_p)
+		return (0);
+	p = heap_p;
+	while ((*s1 != 0) && (n--))
+		*p++ = *s1++;
+	*p = '\0';
+	return (heap_p);
 }
 
 char	*ft_strdup(const char *s1)
@@ -49,36 +79,6 @@ char	*ft_strdup(const char *s1)
 		*p++ = *s1++;
 	*p = '\0';
 	return (heap_p);
-}
-
-char	*ft_strndup(const char *s1, size_t n)
-{
-	char	*heap_p;
-	char	*p;
-
-	heap_p = malloc(n + 1);
-	if (!heap_p)
-		return (0);
-	p = heap_p;
-	while ((*s1 != 0) && (n--))
-		*p++ = *s1++;
-	*p = '\0';
-	return (heap_p);
-}
-
-static size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	if (!s)
-		return (i);
-	while (*s != 0)
-	{
-		s++;
-		i++;
-	}
-	return (i);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
