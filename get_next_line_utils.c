@@ -6,13 +6,13 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:26:01 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/20 14:30:36 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/20 15:27:42 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static size_t	ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 

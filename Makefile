@@ -1,6 +1,6 @@
 NAME = getnextline
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CC = clang
+CFLAGS = -Wall -Wextra -Werror -g
 
 #source
 SRCS =	test.c get_next_line.c get_next_line_utils.c
@@ -19,8 +19,9 @@ all	: $(NAME)
 $(NAME)	: $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 #compiling
-$(OBJS): $(SRCS)
-	$(CC) $(CFLAGS) -I . -D BUFFER_SIZE=$(BUFFER) -o $@ -c $<
+%.o : %.c get_next_line.h
+	@$(CC) $(CFALGS) -D BUFFER_SIZE=$(BUFFER) -o $@ -c $<
+
 clean	:
 	@rm -rf *.o
 	@echo "cleaning objects"

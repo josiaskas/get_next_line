@@ -6,7 +6,7 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:26:13 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/20 14:46:37 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/20 15:27:34 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define MAX_FD 65535
 
 //utils libft
+size_t	ft_strlen(const char *s);
 char	*ft_strndup(const char *s1, size_t n);
 char	*ft_strdup(const char *s1);
 char	*ft_strjoin(char const *s1, char const *s2);
