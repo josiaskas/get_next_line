@@ -129,30 +129,41 @@ static char	*ft_strchr(const char *s, int c)
 		return ((char *)s);
 	return (0);
 }
+void	ft_bzero(void *s, size_t n)
+{
+	size_t i;
+	unsigned char *temp;
+
+	i = 0;
+	temp = (unsigned char *)s;
+	while (i < n)
+		temp[i++] = 0;
+	s = temp;
+}
 
 static char	*read_data(int fd, char **line, int *readed)
 {
+	char	*endl;
 	char	*tmp;
 	char	buffer[BUFFER_SIZE + 1];
-	char	*endl;
 
 	buffer[0] = 0;
 	tmp = 0;
 	while ((*readed) > 0)
 	{
-		buffer[BUFFER_SIZE] = 0;
 		tmp = *line;
-		endl = ft_strchr(tmp, 0x0a);
-		if (endl)
-		{
-			*line = ft_strndup(tmp, (endl - tmp));
-			if (!(*line))
-				*readed = -1;
-			return (ft_strdup(endl + 1));
-		}
 		*line = ft_strjoin(tmp, buffer);
 		free(tmp);
+		if ((endl = ft_strchr(*line, 10)))
+		{
+			tmp = ft_strndup(*line, (endl - *line));
+			free(*line);
+			*line = tmp;
+			return (ft_strdup(endl + 1));
+		}
+		ft_bzero(buffer, BUFFER_SIZE);
 		*readed = read(fd, buffer, BUFFER_SIZE);
+		buffer[BUFFER_SIZE] = 0;
 	}
 	return (0);
 }
@@ -167,10 +178,7 @@ int	get_next_line(int fd, char **line)
 		return (-1);
 	*line = 0;
 	if (file[fd])
-	{
-		*line = ft_strdup(file[fd]);
-		free(file[fd]);
-	}
+		*line = file[fd];
 	file[fd] = read_data(fd, line, &readed);
 	return (readed);
 }
