@@ -6,7 +6,7 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:25:51 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/21 04:36:00 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/21 05:25:36 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ static char	*read_data(int fd, char **line, int *readed)
 		if (endl)
 		{
 			tmp = ft_strndup(*line, (endl - *line));
-			if (ft_strlen(endl) > 1)
-				last_part = ft_strdup(endl + 1);
+			last_part = ft_strdup(endl + 1);
 			free(*line);
 			*line = tmp;
 			return (last_part);
@@ -69,7 +68,7 @@ static char	*read_data(int fd, char **line, int *readed)
 
 int	get_next_line(int fd, char **line)
 {
-	static char	*file[MAX_FD];
+	static char	*file[MAX_FD] = {0};
 	int			readed;
 	size_t		len;
 
