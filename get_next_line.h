@@ -6,7 +6,7 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:26:13 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/20 15:27:34 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/21 05:57:24 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 size_t	ft_strlen(const char *s);
 char	*ft_strndup(const char *s1, size_t n);
 char	*ft_strdup(const char *s1);
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin_with_free(char *s1, char const *s2);
 
 int		get_next_line(int fd, char **line);
 
