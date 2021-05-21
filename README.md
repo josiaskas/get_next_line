@@ -1,5 +1,5 @@
 # Line by line file reader
-Fnction made for 42 in C reading files line by line.
+Function made for 42 in C reading files line by line.
 
 ## function
 

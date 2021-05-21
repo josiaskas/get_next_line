@@ -6,7 +6,7 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:25:51 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/20 22:27:39 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/20 23:57:37 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	get_next_line(int fd, char **line)
 	else
 		check = ft_strlcpy(file, tmp, (BUFFER_SIZE + 1));
 	free(tmp);
-	if ((readed > 1) || ((readed == 0) && (*line != 0)))
+	if (readed > 1)
 		return (1);
 	return (readed);
 }
