@@ -13,7 +13,11 @@ Function made for 42 in C reading files line by line.
  - -1 : Une erreur est survenue
 
 ## compiling
- gcc -Wall -Wextra -Werror -D BUFFER_SIZE=32 get_next_line.c get_next_line_utils.c
+ test compiling with :
+ gcc -Wall -Wextra -Werror -g -D BUFFER_SIZE=32 get_next_line.c get_next_line_utils.c main_test.c
+ ```sh
+  gcc -Wall -Wextra -Werror -g -D BUFFER_SIZE=32 get_next_line.c get_next_line_utils.c main_test.c
+ ```
 
 ## tested
 - 42 test
