@@ -6,7 +6,7 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:25:51 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/20 19:41:38 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/21 04:36:00 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,10 @@ static char	*read_data(int fd, char **line, int *readed)
 	char	*endl;
 	char	*tmp;
 	char	buffer[BUFFER_SIZE + 1];
+	char	*last_part;
 
-	buffer[0] = 0;
-	tmp = 0;
+	ft_bzero(buffer, (BUFFER_SIZE + 1));
+	last_part = 0;
 	while ((*readed) > 0)
 	{
 		tmp = *line;
@@ -54,13 +55,14 @@ static char	*read_data(int fd, char **line, int *readed)
 		if (endl)
 		{
 			tmp = ft_strndup(*line, (endl - *line));
+			if (ft_strlen(endl) > 1)
+				last_part = ft_strdup(endl + 1);
 			free(*line);
 			*line = tmp;
-			return (ft_strdup(endl + 1));
+			return (last_part);
 		}
-		ft_bzero(buffer, BUFFER_SIZE);
+		ft_bzero(buffer, (BUFFER_SIZE + 1));
 		*readed = read(fd, buffer, BUFFER_SIZE);
-		buffer[BUFFER_SIZE] = 0;
 	}
 	return (0);
 }
@@ -69,13 +71,16 @@ int	get_next_line(int fd, char **line)
 {
 	static char	*file[MAX_FD];
 	int			readed;
+	size_t		len;
 
 	readed = 1;
 	if ((fd < 0) || (!line) || (BUFFER_SIZE < 1) || (read(fd, file, 0) < 0))
 		return (-1);
 	*line = 0;
-	if (file[fd])
+	len = ft_strlen(file[fd]);
+	if (len)
 		*line = file[fd];
+	file[fd] = 0;
 	file[fd] = read_data(fd, line, &readed);
 	if (readed > 1)
 		return (1);
