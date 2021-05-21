@@ -16,4 +16,7 @@ Function made for 42 in C reading files line by line.
  gcc -Wall -Wextra -Werror -D BUFFER_SIZE=32 get_next_line.c get_next_line_utils.c
 
 ## tested
+- 42 test
  test with Tripouille/gnlTester
+- memory leaks and 42 test also
+ test with charMstr/GNL_lover
