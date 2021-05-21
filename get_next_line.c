@@ -6,7 +6,7 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:25:51 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/20 23:57:37 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/21 04:23:25 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,38 +37,10 @@ static void	ft_bzero(void *s, size_t n)
 	s = temp;
 }
 
-static char	*read_data(int fd, char **line, int *readed)
-{
-	char	*endl;
-	char	*tmp;
-	char	buffer[BUFFER_SIZE + 1];
-
-	buffer[0] = 0;
-	tmp = 0;
-	while ((*readed) > 0)
-	{
-		tmp = *line;
-		*line = ft_strjoin(tmp, buffer);
-		free(tmp);
-		endl = ft_strchr(*line, 10);
-		if (endl)
-		{
-			tmp = ft_strndup(*line, (endl - *line));
-			free(*line);
-			*line = tmp;
-			return (ft_strdup(endl + 1));
-		}
-		ft_bzero(buffer, BUFFER_SIZE);
-		*readed = read(fd, buffer, BUFFER_SIZE);
-		buffer[BUFFER_SIZE] = 0;
-	}
-	return (0);
-}
-
 static size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	size_t		copied;
-	const char	*s_begin = src;
+	size_t copied;
+	const char *s_begin = src;
 
 	copied = 0;
 	if ((dst == 0) || (src == 0))
@@ -86,26 +58,57 @@ static size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 		src++;
 	return (src - s_begin);
 }
+static char	*read_data(int fd, char **line, int *readed)
+{
+	char	*endl;
+	char	*tmp;
+	char	buffer[BUFFER_SIZE + 1];
+	char	*last_part;
+
+	ft_bzero(buffer, (BUFFER_SIZE + 1));
+	last_part = 0;
+	while ((*readed) > 0)
+	{
+		tmp = *line;
+		*line = ft_strjoin(tmp, buffer);
+		free(tmp);
+		endl = ft_strchr(*line, 10);
+		if (endl)
+		{
+			tmp = ft_strndup(*line, (endl - (*line)));
+			if (ft_strlen(endl) > 1)
+				last_part = ft_strdup(endl + 1);
+			free(*line);
+			*line = tmp;
+			return (last_part);
+		}
+		ft_bzero(buffer, (BUFFER_SIZE + 1));
+		*readed = read(fd, buffer, BUFFER_SIZE);
+	}
+	return (0);
+}
 
 int	get_next_line(int fd, char **line)
 {
-	static char	file[BUFFER_SIZE + 1];
+	static char	file[BUFFER_SIZE + 1] = {0};
 	int			readed;
-	int			check;
-	char		*tmp;
+	size_t		len;
+	char		*left_data;
 
 	readed = 1;
+	len = 0;
+	left_data = 0;
 	if ((fd < 0) || (!line) || (BUFFER_SIZE < 1) || (read(fd, file, 0) < 0))
 		return (-1);
 	*line = 0;
-	if (file[0] != 0)
-		*line = ft_strdup(file);
-	tmp = read_data(fd, line, &readed);
-	if (!tmp)
-		ft_bzero(file, BUFFER_SIZE);
-	else
-		check = ft_strlcpy(file, tmp, (BUFFER_SIZE + 1));
-	free(tmp);
+	len = ft_strlen(file);
+	if (len)
+		*line = ft_strndup(file, len);
+	ft_bzero(file, (BUFFER_SIZE + 1));
+	left_data = read_data(fd, line, &readed);
+	if (left_data)
+		ft_strlcpy(file, left_data, (BUFFER_SIZE + 1));
+	free(left_data);
 	if (readed > 1)
 		return (1);
 	return (readed);
