@@ -6,7 +6,7 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:25:51 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/21 04:23:25 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/21 05:53:52 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static void	ft_bzero(void *s, size_t n)
 
 static size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	size_t copied;
-	const char *s_begin = src;
+	size_t		copied;
+	const char	*s_begin = src;
 
 	copied = 0;
 	if ((dst == 0) || (src == 0))
@@ -58,6 +58,7 @@ static size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 		src++;
 	return (src - s_begin);
 }
+
 static char	*read_data(int fd, char **line, int *readed)
 {
 	char	*endl;
@@ -70,8 +71,7 @@ static char	*read_data(int fd, char **line, int *readed)
 	while ((*readed) > 0)
 	{
 		tmp = *line;
-		*line = ft_strjoin(tmp, buffer);
-		free(tmp);
+		*line = ft_strjoin_with_free(tmp, buffer);
 		endl = ft_strchr(*line, 10);
 		if (endl)
 		{

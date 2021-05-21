@@ -6,7 +6,7 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:26:01 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/20 19:40:20 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/21 05:57:11 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	*ft_strdup(const char *s1)
 	return (heap_p);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin_with_free(char *s1, char const *s2)
 {
 	size_t	len1;
 	size_t	len2;
@@ -101,5 +101,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_memmove(heap_p, s1, len1);
 	ft_memmove((heap_p + len1), s2, len2);
 	heap_p[len1 + len2] = 0;
+	free(s1);
 	return (heap_p);
 }

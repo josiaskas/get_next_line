@@ -6,7 +6,7 @@
 /*   By: jkasongo <jkasongo@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 09:25:51 by jkasongo          #+#    #+#             */
-/*   Updated: 2021/05/21 04:36:00 by jkasongo         ###   ########.fr       */
+/*   Updated: 2021/05/21 05:54:37 by jkasongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ static char	*read_data(int fd, char **line, int *readed)
 	while ((*readed) > 0)
 	{
 		tmp = *line;
-		*line = ft_strjoin(tmp, buffer);
-		free(tmp);
+		*line = ft_strjoin_with_free(tmp, buffer);
 		endl = ft_strchr(*line, 10);
 		if (endl)
 		{
